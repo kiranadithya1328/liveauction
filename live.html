@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>LIVE AUCTION | Sports Broadcast</title>
+
+  <style>
+    /* ===== IMPORT FONTS ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Anton&display=swap');
+
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: #0a0a0f;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ===== SPORTS BROADCAST BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(125deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%),
+        repeating-linear-gradient(45deg, rgba(255, 100, 0, 0.02) 0px, rgba(255, 100, 0, 0.02) 2px, transparent 2px, transparent 8px);
+      z-index: -2;
+    }
+
+    /* ===== TV SCAN LINES ===== */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 6px);
+      pointer-events: none;
+      z-index: 100;
+      animation: scanLines 8s linear infinite;
+    }
+
+    @keyframes scanLines {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(100%);
+      }
+    }
+
+    /* ===== ANIMATED BACKGROUND EFFECTS ===== */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .bg-effects div {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.3;
+      animation: floatBg 20s infinite ease-in-out;
+    }
+
+    .bg-effects div:nth-child(1) {
+      background: #ff6a00;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .bg-effects div:nth-child(2) {
+      background: #00d4ff;
+      bottom: -100px;
+      right: -100px;
+      animation-delay: -7s;
+    }
+
+    .bg-effects div:nth-child(3) {
+      background: #ff0080;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -14s;
+      width: 500px;
+      height: 500px;
+    }
+
+    @keyframes floatBg {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(50px, -50px) scale(1.1);
+      }
+      66% {
+        transform: translate(-30px, 30px) scale(0.9);
+      }
+    }
+
+    /* ===== WRAPPER ===== */
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== TOP BAR - TV STYLE ===== */
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border-left: 4px solid #ff6a00;
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .top h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      background: linear-gradient(135deg, #ff6a00, #ffd36a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2px;
+      animation: pulseText 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseText {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    .muted {
+      color: #c9d2e5;
+      font-size: 0.9rem;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff6a00, #ff8c42);
+      padding: 12px 24px;
+      border-radius: 50px;
+      color: #fff;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .back-btn:hover::before {
+      left: 100%;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 106, 0, 0.5);
+    }
+
+    /* ===== BEFORE AUCTION CARD ===== */
+    #beforeAuction {
+      background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 106, 0, 0.3);
+      border-radius: 20px;
+      padding: 60px 40px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    #beforeAuction h2 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      margin-bottom: 15px;
+      color: #ff8c42;
+    }
+
+    /* ===== LOADING STATE ===== */
+    .loading-state {
+      background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 106, 0, 0.3);
+      border-radius: 20px;
+      padding: 60px 40px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 106, 0, 0.3);
+      border-top-color: #ff6a00;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ===== LIVE AREA LAYOUT ===== */
+    .layout {
+      display: grid;
+      grid-template-columns: 1.5fr 0.8fr;
+      gap: 20px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== PLAYER CARD - TV BROADCAST STYLE ===== */
+    .player-card {
+      background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(20,20,40,0.85));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 106, 0, 0.4);
+      border-radius: 20px;
+      padding: 25px;
+      transition: all 0.4s ease;
+      animation: cardGlow 3s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 106, 0, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 4s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) rotate(45deg);
+      }
+      100% {
+        transform: translateX(100%) rotate(45deg);
+      }
+    }
+
+    @keyframes cardGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 106, 0, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(255, 106, 0, 0.4);
+      }
+    }
+
+    .player-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 106, 0, 0.8);
+    }
+
+    .player-image-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      min-height: 300px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+      border-radius: 15px;
+    }
+
+    .player-card img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .player-card img:hover {
+      transform: scale(1.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #ff6a00, #ff3d00);
+      color: #fff;
+      font-weight: bold;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+      animation: pulse 1.5s ease-in-out infinite;
+      box-shadow: 0 0 15px rgba(255, 106, 0, 0.5);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .player-card h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-family: 'Anton', sans-serif;
+      letter-spacing: 1px;
+      margin: 10px 0;
+      color: #fff;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      color: #ffd36a;
+      margin: 20px 0;
+      font-weight: bold;
+      font-family: 'Orbitron', monospace;
+      text-shadow: 0 0 20px rgba(255, 211, 106, 0.5);
+      animation: priceGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes priceGlow {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 211, 106, 0.3);
+      }
+      50% {
+        text-shadow: 0 0 30px rgba(255, 211, 106, 0.8);
+      }
+    }
+
+    /* ===== RIGHT SIDE CARDS ===== */
+    .card {
+      background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 106, 0, 0.3);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 106, 0, 0.6);
+      transform: translateX(-5px);
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #ff8c42;
+      font-family: 'Orbitron', monospace;
+      border-left: 3px solid #ff6a00;
+      padding-left: 12px;
+    }
+
+    /* ===== STATUS TEXT ===== */
+    #statusText {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 106, 0, 0.2);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% {
+        background: rgba(255, 106, 0, 0.2);
+      }
+      50% {
+        background: rgba(255, 106, 0, 0.4);
+      }
+    }
+
+    /* ===== SOLD PLAYERS LIST ===== */
+    #soldPlayersList {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    #soldPlayersList > div {
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border-left: 3px solid #ff6a00;
+      transition: all 0.3s ease;
+      animation: slideInRight 0.5s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #soldPlayersList > div:hover {
+      background: rgba(255, 106, 0, 0.2);
+      transform: translateX(5px);
+    }
+
+    #soldPlayersList strong {
+      color: #ffd36a;
+      font-size: 1rem;
+    }
+
+    /* ===== SCROLLBAR STYLING ===== */
+    #soldPlayersList::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #soldPlayersList::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    #soldPlayersList::-webkit-scrollbar-thumb {
+      background: #ff6a00;
+      border-radius: 10px;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 968px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap {
+        padding: 15px;
+      }
+
+      .player-image-container {
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .player-card {
+        padding: 15px;
+      }
+
+      .player-image-container {
+        min-height: 200px;
+      }
+
+      .price {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* ===== LIVE INDICATOR ===== */
+    .live-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 0, 0, 0.9);
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      animation: blink 1s ease-in-out infinite;
+      z-index: 1000;
+    }
+
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-effects">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div class="live-indicator">🔴 LIVE BROADCAST</div>
+
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>🏸 LIVE AUCTION 2026</h1>
+        <p class="muted">🎥 Official Sports Broadcast | Powered by DK's Badminton Club</p>
+      </div>
+      <a href="index.html" class="back-btn">← BACK TO HOME</a>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="loadingState" class="loading-state">
+      <div class="loading-spinner"></div>
+      <h2>📡 Connecting to Broadcast...</h2>
+      <p class="muted">Fetching live auction data</p>
+    </div>
+
+    <!-- BEFORE AUCTION -->
+    <div id="beforeAuction" class="card" style="display:none;">
+      <h2>🏆 AUCTION NOT STARTED 🏆</h2>
+      <p class="muted">Please wait for the auction to begin...</p>
+      <div style="margin-top: 20px;">⏰ Coming Soon</div>
+    </div>
+
+    <!-- NO DATA STATE -->
+    <div id="noDataState" class="card" style="display:none;">
+      <h2>⚠️ NO AUCTION DATA</h2>
+      <p class="muted">No active auction found. Please check back later.</p>
+      <div style="margin-top: 20px;">🔄 Refresh page to try again</div>
+    </div>
+
+    <!-- LIVE AREA -->
+    <div id="liveArea" class="layout" style="display:none;">
+      <!-- PLAYER CARD -->
+      <div class="card player-card">
+        <div class="player-image-container">
+          <img id="playerImage" src="" alt="Player">
+        </div>
+        <div>
+          <div id="statusBadge" class="badge">LIVE</div>
+          <h2 id="playerName">-</h2>
+          <p id="playerCategory" class="muted">Category: -</p>
+          <p id="playerBasePrice" class="muted">Base Price: -</p>
+          <div id="currentBid" class="price">₹0</div>
+          <p id="highestBidder" class="muted">Highest Bidder: -</p>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div>
+        <div class="card">
+          <h3>📊 CURRENT STATUS</h3>
+          <p id="statusText">Waiting for data...</p>
+        </div>
+
+        <div class="card">
+          <h3>🏅 SOLD PLAYERS</h3>
+          <div id="soldPlayersList">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      onSnapshot,
+      collection,
+      query,
+      orderBy,
+      limit
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBRAFSEKVsDpCQLYhyu3DbCJ7-fjpegChE",
+      authDomain: "badminton-auction-46109.firebaseapp.com",
+      projectId: "badminton-auction-46109",
+      storageBucket: "badminton-auction-46109.firebasestorage.app",
+      messagingSenderId: "365770814132",
+      appId: "1:365770814132:web:aeb57e14d2c516ecaa9de1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const loadingState = document.getElementById("loadingState");
+    const beforeAuction = document.getElementById("beforeAuction");
+    const noDataState = document.getElementById("noDataState");
+    const liveArea = document.getElementById("liveArea");
+
+    const playerImage = document.getElementById("playerImage");
+    const playerName = document.getElementById("playerName");
+    const playerCategory = document.getElementById("playerCategory");
+    const playerBasePrice = document.getElementById("playerBasePrice");
+    const currentBid = document.getElementById("currentBid");
+    const highestBidder = document.getElementById("highestBidder");
+    const statusText = document.getElementById("statusText");
+    const statusBadge = document.getElementById("statusBadge");
+
+    async function loadPlayer(playerId, auction) {
+      try {
+        const snap = await getDoc(doc(db, "players", playerId));
+        if (!snap.exists()) {
+          console.error("Player not found:", playerId);
+          playerName.textContent = "Player Not Found";
+          return;
+        }
+
+        const p = snap.data();
+        
+        playerImage.src = p.image || "https://via.placeholder.com/400x300?text=No+Image";
+        playerImage.alt = p.name;
+        playerName.textContent = p.name || "Unknown Player";
+        playerCategory.textContent = "🏷️ Category: " + (p.category || "N/A");
+        playerBasePrice.textContent = "💰 Base Price: ₹" + Number(p.basePrice || 0).toLocaleString("en-IN");
+        currentBid.textContent = "₹" + Number(auction.currentBid || 0).toLocaleString("en-IN");
+        
+        if (auction.status === "sold") {
+          highestBidder.textContent = "🏆 Sold To: " + (auction.highestBidder || "-");
+        } else {
+          highestBidder.textContent = "🎯 Highest Bidder: " + (auction.highestBidder || "-");
+        }
+        
+        let statusDisplay = auction.status || "unknown";
+        if (statusDisplay === "running") {
+          statusText.textContent = "🔴 LIVE BIDDING IN PROGRESS";
+        } else if (statusDisplay === "sold") {
+          statusText.textContent = "✅ SOLD!";
+        } else if (statusDisplay === "paused") {
+          statusText.textContent = "⏸️ AUCTION PAUSED";
+        } else {
+          statusText.textContent = statusDisplay.toUpperCase();
+        }
+        
+        statusBadge.textContent = (auction.status || "LIVE").toUpperCase();
+        
+      } catch (error) {
+        console.error("Error loading player:", error);
+        playerName.textContent = "Error Loading Player";
+      }
+    }
+
+    // LIVE AUCTION DATA
+    const auctionRef = doc(db, "auction", "current");
+    
+    onSnapshot(auctionRef, async (snap) => {
+      const data = snap.data();
+      
+      if (loadingState) loadingState.style.display = "none";
+      
+      if (!data) {
+        beforeAuction.style.display = "none";
+        noDataState.style.display = "block";
+        liveArea.style.display = "none";
+        return;
+      }
+      
+      if (!data.playerId || data.status === "stopped") {
+        beforeAuction.style.display = "block";
+        noDataState.style.display = "none";
+        liveArea.style.display = "none";
+        return;
+      }
+      
+      beforeAuction.style.display = "none";
+      noDataState.style.display = "none";
+      liveArea.style.display = "grid";
+      
+      await loadPlayer(data.playerId, data);
+    }, (error) => {
+      console.error("Firestore error:", error);
+      if (loadingState) loadingState.style.display = "none";
+      beforeAuction.style.display = "none";
+      noDataState.style.display = "block";
+      liveArea.style.display = "none";
+      
+      const soldList = document.getElementById("soldPlayersList");
+      if (soldList) soldList.innerHTML = "<div style='color: #ffb4bc;'>⚠️ Connection error. Please check your internet.</div>";
+    });
+
+    // SOLD PLAYERS LIST
+    function loadSoldPlayers() {
+      const soldList = document.getElementById("soldPlayersList");
+      if (!soldList) return;
+
+      const q = query(
+        collection(db, "soldPlayers"),
+        orderBy("soldAt", "desc"),
+        limit(8)
+      );
+
+      onSnapshot(q, (snap) => {
+        let html = "";
+        
+        if (snap.empty) {
+          html = "<div>No players sold yet</div>";
+        } else {
+          snap.forEach((docSnap) => {
+            const d = docSnap.data();
+            html += `
+              <div>
+                <strong>🏸 ${d.playerName || "Unknown"}</strong><br>
+                <span class="muted">🏢 Sold to: ${d.teamName || "Unknown"}</span><br>
+                <span class="muted">💰 Amount: ₹${Number(d.amount || 0).toLocaleString("en-IN")}</span>
+              </div>
+            `;
+          });
+        }
+        
+        soldList.innerHTML = html;
+      }, (error) => {
+        console.error("Error loading sold players:", error);
+        soldList.innerHTML = "<div>⚠️ Error loading sold players</div>";
+      });
+    }
+
+    loadSoldPlayers();
+    
+    setTimeout(() => {
+      if (loadingState && loadingState.style.display !== "none") {
+        loadingState.style.display = "none";
+        noDataState.style.display = "block";
+      }
+    }, 5000);
+  </script>
+</body>
+</html>
