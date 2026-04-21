@@ -508,7 +508,7 @@
             <div class="price" id="currentBid">💎 Current Bid: ₹0</div>
             <p class="muted" id="highestBidder">🏆 Highest Bidder: -</p>
 
-            <button class="bid-btn" id="bidBtn">💰 PLACE BID (+20L)</button>
+            <button class="bid-btn" id="bidBtn">💰 PLACE BID (+10L)</button>
             <div id="bidMsg" class="message"></div>
           </div>
         </div>
@@ -533,7 +533,7 @@
 
         <div class="card">
           <h3>📜 BIDDING RULE</h3>
-          <p class="muted">Each click places a fixed bid of ₹20,00,000.</p>
+          <p class="muted">Each click places a fixed bid of ₹10,00,000.</p>
         </div>
       </div>
     </div>
@@ -757,7 +757,7 @@ let lastSoldSoundKey = "";
         return;
       }
 
-      const FIXED_BID = 2000000; // 20 Lakhs
+      const FIXED_BID = 1000000; // 10 Lakhs
       const currentLiveBid = Number(currentAuctionData.currentBid || 0);
       const teamBudget = Number(currentTeamData.budget || 0);
       const nextBid = currentLiveBid + FIXED_BID;
